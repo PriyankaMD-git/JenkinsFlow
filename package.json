@@ -1,0 +1,12 @@
+{
+  "name": "jenkinsflow",
+  "version": "1.0.0",
+  "description": "My Jenkins demo app",
+  "scripts": {
+    "start": "node app.js",
+    "build": "echo Building the app..."
+  },
+  "author": "Your Name",
+  "license": "ISC"
+}
+
