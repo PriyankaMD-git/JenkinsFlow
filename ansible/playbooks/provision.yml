@@ -1,0 +1,32 @@
+---
+- name: Provision base environment
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install required packages
+      apt:
+        name:
+          - curl
+          - git
+          - docker.io
+          - nodejs
+          - npm
+        state: present
+
+    - name: Enable and start Docker
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
+
+    - name: Create app directory
+      file:
+        path: /opt/jenkinsflow
+        state: directory
+        owner: "{{ ansible_user }}"
+        mode: '0755'

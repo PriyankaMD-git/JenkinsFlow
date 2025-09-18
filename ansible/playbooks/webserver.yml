@@ -1,0 +1,37 @@
+---
+- name: Deploy JenkinsFlow web server
+  hosts: all
+  become: yes
+
+  vars:
+    backend_image: quiz-backend
+    frontend_image: quiz-frontend
+
+  tasks:
+    - name: Pull backend Docker image
+      docker_image:
+        name: "{{ backend_image }}"
+        source: pull
+
+    - name: Run backend container
+      docker_container:
+        name: backend-container
+        image: "{{ backend_image }}"
+        state: started
+        restart_policy: always
+        published_ports:
+          - 5000:5000
+
+    - name: Pull frontend Docker image
+      docker_image:
+        name: "{{ frontend_image }}"
+        source: pull
+
+    - name: Run frontend container
+      docker_container:
+        name: frontend-container
+        image: "{{ frontend_image }}"
+        state: started
+        restart_policy: always
+        published_ports:
+          - 3000:3000

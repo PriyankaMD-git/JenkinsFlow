@@ -1,14 +1,16 @@
-# Use Node.js base image
+# Use official Node.js image
 FROM node:18
 
 # Set working directory inside container
 WORKDIR /app
 
-# Copy package.json and install dependencies
+# Copy package.json and package-lock.json from src folder
 COPY src/package*.json ./
+
+# Install dependencies
 RUN npm install
 
-# Copy all source files
+# Copy all source files from src folder
 COPY src ./
 
 # Expose backend port

@@ -1,11 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { getQuiz, createQuiz } = require('../controllers/quizController');
+const quizController = require('../controllers/quizController');
 
-// GET /api/quiz
-router.get('/', getQuiz);
-
-// POST /api/quiz
-router.post('/', createQuiz);
+router.get('/', quizController.getQuiz);
+router.post('/', quizController.createQuiz); // ← This line is failing
 
 module.exports = router;
