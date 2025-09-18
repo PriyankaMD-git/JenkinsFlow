@@ -1,1 +1,3 @@
-test('Dummy test to pass CI', () = expect(true).toBe(true); }); 
+test('Dummy test to verify CI pipeline', () => {
+  expect(true).toBe(true);
+});
