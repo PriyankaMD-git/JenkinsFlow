@@ -1,18 +1,20 @@
 # Node dependencies and build artifacts
-**/node_modules/
-**/dist/
-**/.next/
+node_modules/
+dist/
+build/
+.next/
+.cache/
 
 # Python cache and virtual environments
-**/__pycache__/
-**/*.pyc
-**/.venv/
-**/*.egg-info/
+__pycache__/
+*.pyc
+.venv/
+*.egg-info
 
 # Environment files
-**/.env
+.env
 
-# Logs and temp filess
+# Logs and temp files
 *.log
 *.tmp
 *.bak
@@ -23,5 +25,13 @@
 .vscode/
 
 # Docker and Jenkins artifacts
-**/.dockerignore
-**/jenkinsfile
+.dockerignore
+docker-compose.override.yml
+*.tar
+jenkinsfile
+
+# Test artifacts
+__snapshots__/
+*.test.js
+*.spec.js
+coverage/
