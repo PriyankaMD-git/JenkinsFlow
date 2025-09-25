@@ -12,7 +12,7 @@
 # Environment files
 **/.env
 
-# Logs and temp files
+# Logs and temp filess
 *.log
 *.tmp
 *.bak
