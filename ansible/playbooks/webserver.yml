@@ -1,37 +1,51 @@
 ---
-- name: Deploy JenkinsFlow web server
-  hosts: all
-  become: yes
+- name: Deploy JenkinsFlow web server locally
+  hosts: localhost
+  connection: local
+  become: true
 
   vars:
-    backend_image: quiz-backend
-    frontend_image: quiz-frontend
+    backend_image: priyankadhavale/jenkinsflow-backend:latest
+    frontend_image: priyankadhavale/jenkinsflow-frontend:latest
+
+  pre_tasks:
+    - name: Ensure Docker is installed
+      ansible.builtin.command: docker --version
+      register: docker_check
+      failed_when: docker_check.rc != 0
+      changed_when: false
 
   tasks:
     - name: Pull backend Docker image
-      docker_image:
+      community.docker.docker_image:
         name: "{{ backend_image }}"
         source: pull
+      tags: backend
 
     - name: Run backend container
-      docker_container:
+      community.docker.docker_container:
         name: backend-container
         image: "{{ backend_image }}"
         state: started
         restart_policy: always
         published_ports:
-          - 5000:5000
+          - "5000:5000"
+        pull: true
+      tags: backend
 
     - name: Pull frontend Docker image
-      docker_image:
+      community.docker.docker_image:
         name: "{{ frontend_image }}"
         source: pull
+      tags: frontend
 
     - name: Run frontend container
-      docker_container:
+      community.docker.docker_container:
         name: frontend-container
         image: "{{ frontend_image }}"
         state: started
         restart_policy: always
         published_ports:
-          - 3000:3000
+          - "3000:3000"
+        pull: true
+      tags: frontend
