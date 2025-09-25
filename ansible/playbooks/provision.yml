@@ -1,6 +1,6 @@
 ---
 - name: Provision base environment
-  hosts: all
+  hosts: localhost
   become: yes
 
   tasks:
@@ -19,7 +19,7 @@
         state: present
 
     - name: Enable and start Docker
-      systemd:
+      service:
         name: docker
         enabled: yes
         state: started
@@ -28,5 +28,5 @@
       file:
         path: /opt/jenkinsflow
         state: directory
-        owner: "{{ ansible_user }}"
-        mode: '0755'
+        owner: "priyanka"
+        mode: "0755"

@@ -1,0 +1,27 @@
+# Node dependencies and build artifacts
+**/node_modules/
+**/dist/
+**/.next/
+
+# Python cache and virtual environments
+**/__pycache__/
+**/*.pyc
+**/.venv/
+**/*.egg-info/
+
+# Environment files
+**/.env
+
+# Logs and temp files
+*.log
+*.tmp
+*.bak
+*.swp
+
+# OS and editor files
+.DS_Store
+.vscode/
+
+# Docker and Jenkins artifacts
+**/.dockerignore
+**/jenkinsfile
