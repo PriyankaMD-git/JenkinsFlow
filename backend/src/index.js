@@ -34,6 +34,11 @@ app.post('/api/submit', (req, res) => {
   res.json({ score });
 });
 
+// ✅ Health check route
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
 // Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
