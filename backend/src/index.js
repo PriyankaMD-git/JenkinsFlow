@@ -5,7 +5,7 @@ require('dotenv').config();
 const { log } = require('./utils/logger');
 
 // Middleware
-app.use(cors()); // ✅ Allow cross-origin requests
+app.use(cors()); //  Allow cross-origin requests
 app.use(express.json());
 
 // Routes
@@ -34,9 +34,14 @@ app.post('/api/submit', (req, res) => {
   res.json({ score });
 });
 
-// ✅ Health check route
+//  Health check route
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
+//  Root route for sanity check
+app.get('/', (req, res) => {
+  res.send('Backend is running 🚀');
 });
 
 // Server
