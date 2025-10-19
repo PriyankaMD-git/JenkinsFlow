@@ -1,51 +1,38 @@
----
-- name: Deploy JenkinsFlow web server locally
+- name: Setup Frontend Environment and Deploy Container
   hosts: localhost
-  connection: local
-  become: true
-
-  vars:
-    backend_image: priyankadhavale/jenkinsflow-backend:latest
-    frontend_image: priyankadhavale/jenkinsflow-frontend:latest
-
-  pre_tasks:
-    - name: Ensure Docker is installed
-      ansible.builtin.command: docker --version
-      register: docker_check
-      failed_when: docker_check.rc != 0
-      changed_when: false
+  become: yes
+  collections:
+    - community.docker
 
   tasks:
-    - name: Pull backend Docker image
-      community.docker.docker_image:
-        name: "{{ backend_image }}"
-        source: pull
-      tags: backend
+    - name: Ensure Docker is installed
+      apt:
+        name: docker.io
+        state: present
+      when: ansible_os_family == "Debian"
 
-    - name: Run backend container
-      community.docker.docker_container:
-        name: backend-container
-        image: "{{ backend_image }}"
+    - name: Start Docker service
+      service:
+        name: docker
         state: started
-        restart_policy: always
-        published_ports:
-          - "5000:5000"
-        pull: true
-      tags: backend
+        enabled: true
 
-    - name: Pull frontend Docker image
+    - name: Pull frontend image from Docker Hub
       community.docker.docker_image:
-        name: "{{ frontend_image }}"
+        name: priyankadhavale/jenkinsflow-frontend
+        tag: latest
         source: pull
-      tags: frontend
+
+    - name: Stop and remove existing frontend container
+      community.docker.docker_container:
+        name: jenkinsflow-frontend-app
+        state: absent
+        force_kill: true
 
     - name: Run frontend container
       community.docker.docker_container:
-        name: frontend-container
-        image: "{{ frontend_image }}"
+        name: jenkinsflow-frontend-app
+        image: priyankadhavale/jenkinsflow-frontend:latest
         state: started
-        restart_policy: always
-        published_ports:
-          - "3000:3000"
-        pull: true
-      tags: frontend
+        ports:
+          - "3000:80"

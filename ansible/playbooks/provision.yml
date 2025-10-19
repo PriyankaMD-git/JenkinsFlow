@@ -1,32 +1,38 @@
----
-- name: Provision base environment
+- name: Setup Backend Environment and Deploy Container
   hosts: localhost
   become: yes
+  collections:
+    - community.docker
 
   tasks:
-    - name: Update apt cache
+    - name: Ensure Docker is installed
       apt:
-        update_cache: yes
-
-    - name: Install required packages
-      apt:
-        name:
-          - curl
-          - git
-          - docker.io
-          - nodejs
-          - npm
+        name: docker.io
         state: present
+      when: ansible_os_family == "Debian"
 
-    - name: Enable and start Docker
+    - name: Start Docker service
       service:
         name: docker
-        enabled: yes
         state: started
+        enabled: true
 
-    - name: Create app directory
-      file:
-        path: /opt/jenkinsflow
-        state: directory
-        owner: "priyanka"
-        mode: "0755"
+    - name: Pull backend image from Docker Hub
+      community.docker.docker_image:
+        name: priyankadhavale/jenkinsflow-backend
+        tag: latest
+        source: pull
+
+    - name: Stop and remove existing backend container
+      community.docker.docker_container:
+        name: jenkinsflow-backend-app
+        state: absent
+        force_kill: true
+
+    - name: Run backend container
+      community.docker.docker_container:
+        name: jenkinsflow-backend-app
+        image: priyankadhavale/jenkinsflow-backend:latest
+        state: started
+        ports:
+          - "5001:5000"
