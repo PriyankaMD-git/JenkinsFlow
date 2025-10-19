@@ -1,20 +1,20 @@
 # Use official Node.js image
-FROM node:18
+FROM node:18-alpine
 
 # Set working directory inside container
 WORKDIR /app
 
-# Copy package.json and package-lock.json from src folder
-COPY src/package*.json ./
+# Copy package.json and package-lock.json from root (not src/)
+COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm ci
 
-# Copy all source files from src folder
-COPY src ./
+# Copy all backend source files from root
+COPY . .
 
 # Expose backend port
 EXPOSE 5000
 
 # Start the server
-CMD ["node", "index.js"]
+CMD ["npm", "start"]

@@ -1,0 +1,15 @@
+{
+  "title": "DevOps Basics",
+  "questions": [
+    {
+      "questionText": "What does CI stand for?",
+      "options": ["Continuous Integration", "Code Injection", "Cloud Interface", "Container Instance"],
+      "correctAnswer": "Continuous Integration"
+    },
+    {
+      "questionText": "Which tool is used for containerization?",
+      "options": ["Jenkins", "Docker", "Git", "Terraform"],
+      "correctAnswer": "Docker"
+    }
+  ]
+}
