@@ -4,6 +4,9 @@
   collections:
     - community.docker
 
+  vars:
+    frontend_version: v1.0.0  # 🔧 Change this to rollback or upgrade
+
   tasks:
     - name: Ensure Docker is installed
       apt:
@@ -20,7 +23,7 @@
     - name: Pull frontend image from Docker Hub
       community.docker.docker_image:
         name: priyankadhavale/jenkinsflow-frontend
-        tag: latest
+        tag: "{{ frontend_version }}"
         source: pull
 
     - name: Stop and remove existing frontend container
@@ -32,7 +35,7 @@
     - name: Run frontend container
       community.docker.docker_container:
         name: jenkinsflow-frontend-app
-        image: priyankadhavale/jenkinsflow-frontend:latest
+        image: priyankadhavale/jenkinsflow-frontend:{{ frontend_version }}
         state: started
         ports:
           - "3000:80"
