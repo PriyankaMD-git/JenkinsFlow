@@ -5,7 +5,7 @@
     - community.docker
 
   vars:
-    frontend_version: v1.0.0  # 🔧 Change this to rollback or upgrade
+    frontend_version: latest  # ✅ Use 'latest' to match Docker Hub tag
 
   tasks:
     - name: Ensure Docker is installed
@@ -19,6 +19,12 @@
         name: docker
         state: started
         enabled: true
+
+    - name: Log in to Docker Hub (optional if needed)
+      community.docker.docker_login:
+        username: "{{ docker_username | default(omit) }}"
+        password: "{{ docker_password | default(omit) }}"
+      when: docker_username is defined and docker_password is defined
 
     - name: Pull frontend image from Docker Hub
       community.docker.docker_image:
@@ -39,3 +45,4 @@
         state: started
         ports:
           - "3000:80"
+        restart_policy: always
