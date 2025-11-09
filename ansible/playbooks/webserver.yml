@@ -5,7 +5,7 @@
     - community.docker
 
   vars:
-    # This variable is overridden by Jenkins' '-e' flag with the unique build number.
+    # This variable is overridden by Jenkins' extra-vars.
     frontend_image_tag: latest 
 
   tasks:
@@ -41,3 +41,5 @@
         ports:
           - "3000:80"
         restart_policy: always
+        # FIX: Tells the Nginx image to start the web server correctly
+        command: ["nginx", "-g", "daemon off;"]
