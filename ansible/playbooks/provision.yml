@@ -5,7 +5,9 @@
     - community.docker
 
   vars:
-    backend_version: latest  # ✅ Use 'latest' to match Docker Hub tag
+    # This variable is overridden by Jenkins' extra-vars (e.g., -e 'backend_image_tag=42').
+    # 'latest' is the default used if the playbook is run manually.
+    backend_image_tag: latest 
 
   tasks:
     - name: Ensure Docker is installed
@@ -29,19 +31,16 @@
     - name: Pull backend image from Docker Hub
       community.docker.docker_image:
         name: priyankadhavale/jenkinsflow-backend
-        tag: "{{ backend_version }}"
+        # Uses the dynamic version tag passed from the CI script
+        tag: "{{ backend_image_tag }}"
         source: pull
 
-    - name: Stop and remove existing backend container
+    # This task automatically handles updating the container to the new image tag.
+    - name: Run backend container (or update to new image)
       community.docker.docker_container:
         name: jenkinsflow-backend-app
-        state: absent
-        force_kill: true
-
-    - name: Run backend container
-      community.docker.docker_container:
-        name: jenkinsflow-backend-app
-        image: priyankadhavale/jenkinsflow-backend:{{ backend_version }}
+        # Uses the dynamic version tag for deployment
+        image: priyankadhavale/jenkinsflow-backend:{{ backend_image_tag }}
         state: started
         ports:
           - "5001:5000"

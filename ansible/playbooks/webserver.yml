@@ -5,7 +5,8 @@
     - community.docker
 
   vars:
-    frontend_version: latest  # ✅ Use 'latest' to match Docker Hub tag
+    # This variable is overridden by Jenkins' '-e' flag with the unique build number.
+    frontend_image_tag: latest 
 
   tasks:
     - name: Ensure Docker is installed
@@ -29,19 +30,13 @@
     - name: Pull frontend image from Docker Hub
       community.docker.docker_image:
         name: priyankadhavale/jenkinsflow-frontend
-        tag: "{{ frontend_version }}"
+        tag: "{{ frontend_image_tag }}"
         source: pull
-
-    - name: Stop and remove existing frontend container
+      
+    - name: Run frontend container (or update to new image)
       community.docker.docker_container:
         name: jenkinsflow-frontend-app
-        state: absent
-        force_kill: true
-
-    - name: Run frontend container
-      community.docker.docker_container:
-        name: jenkinsflow-frontend-app
-        image: priyankadhavale/jenkinsflow-frontend:{{ frontend_version }}
+        image: priyankadhavale/jenkinsflow-frontend:{{ frontend_image_tag }}
         state: started
         ports:
           - "3000:80"

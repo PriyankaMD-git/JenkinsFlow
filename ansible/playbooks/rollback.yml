@@ -1,0 +1,30 @@
+- name: Setup Frontend Environment and Deploy Container
+  hosts: localhost # <--- CHECK THIS: Is your frontend deployed to localhost?
+  become: yes
+  collections:
+    - community.docker
+
+  vars:
+    # 💥 New: Allows Jenkins to override the tag
+    frontend_image_tag: latest 
+
+  tasks:
+    # --- Assuming you have Docker setup tasks here ---
+    
+    # Example deployment task:
+    - name: Pull frontend image from Docker Hub
+      community.docker.docker_image:
+        name: priyankadhavale/jenkinsflow-frontend
+        # Use the dynamic tag
+        tag: "{{ frontend_image_tag }}"
+        source: pull
+
+    - name: Run frontend container (or update to new image)
+      community.docker.docker_container:
+        name: jenkinsflow-frontend-app
+        # Use the dynamic tag
+        image: priyankadhavale/jenkinsflow-frontend:{{ frontend_image_tag }}
+        state: started
+        ports:
+          - "3000:3000" # <--- CHECK THIS: Are these the correct host:container ports?
+        restart_policy: always
