@@ -41,7 +41,7 @@ function App() {
 
   return (
     <div style={{ textAlign: 'center', marginTop: '50px' }}>
-      <h1>Quiz App 🚀</h1>
+      <h1>Quiz App </h1>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {quiz ? (
         <>
@@ -88,7 +88,7 @@ function App() {
             </button>
           ) : (
             <p style={{ fontSize: '18px', color: '#007bff' }}>
-              ✅ Submission successful! Your score: <strong>{score}</strong>
+              Submission successful! Your score: <strong>{score}</strong>
             </p>
           )}
         </>
